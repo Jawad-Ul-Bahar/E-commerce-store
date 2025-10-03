@@ -360,7 +360,7 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 📞 Support
 
-For support, email support@zufe.com or create an issue in this repository.
+For support, email jawadulbahar@gmail.com or create an issue in this repository.
 
 ---
 
@@ -368,6 +368,6 @@ For support, email support@zufe.com or create an issue in this repository.
 
 **⭐ Star this repository if you found it helpful!**
 
-Made with ❤️ by [Your Name]
+Made with ❤️ by [Jawad Ul Bahar]
 
 </div>
