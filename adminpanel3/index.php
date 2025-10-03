@@ -1,7 +1,7 @@
 <?php 
 // Start session and redirect to login page if user not logged in
 session_start();
-if(isset($_SESSION['username'])==null){
+if(isset($_SESSION['admin_username'])==null){
     echo "<script>location.assign('login.php')</script>";
 }
 else{
@@ -38,9 +38,11 @@ else{
 
             <!-- Dashboard heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                <h1 class="h3 mb-0 text-gray-800">
+                    <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                </h1>
                 <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-                    <i class="fas fa-download fa-sm text-white-50"></i> Generate Report
+                    <i class="fas fa-download fa-sm text-white-50 mr-2"></i> Generate Report
                 </a>
             </div>
 
@@ -54,7 +56,7 @@ else{
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                        Earnings (Monthly)
+                                        <i class="fas fa-calendar mr-1"></i>Earnings (Monthly)
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
                                 </div>
@@ -73,7 +75,7 @@ else{
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                        Earnings (Annual)
+                                        <i class="fas fa-dollar-sign mr-1"></i>Earnings (Annual)
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
                                 </div>
@@ -92,7 +94,7 @@ else{
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                        Tasks
+                                        <i class="fas fa-clipboard-list mr-1"></i>Tasks
                                     </div>
                                     <div class="row no-gutters align-items-center">
                                         <div class="col-auto">
@@ -122,7 +124,7 @@ else{
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                        Pending Requests
+                                        <i class="fas fa-comments mr-1"></i>Pending Requests
                                     </div>
                                     <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
                                 </div>
@@ -143,7 +145,9 @@ else{
                 <div class="col-xl-8 col-lg-7">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">
+                                <i class="fas fa-chart-area mr-2"></i>Earnings Overview
+                            </h6>
                         </div>
                         <div class="card-body">
                             <div class="chart-area">
@@ -157,7 +161,9 @@ else{
                 <div class="col-xl-4 col-lg-5">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">
+                                <i class="fas fa-chart-pie mr-2"></i>Revenue Sources
+                            </h6>
                         </div>
                         <div class="card-body">
                             <div class="chart-pie pt-4 pb-2">
@@ -211,8 +217,12 @@ else{
             </div>
             <div class="modal-body">Select "Logout" to end your current session.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    <i class="fas fa-times mr-2"></i>Cancel
+                </button>
+                <a class="btn btn-primary" href="login.html">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
             </div>
         </div>
     </div>

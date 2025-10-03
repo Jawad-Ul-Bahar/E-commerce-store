@@ -1,4 +1,10 @@
 <?php
+// Start session and check admin login
+session_start();
+if(isset($_SESSION['admin_username'])==null){
+    echo "<script>location.assign('login.php')</script>";
+}
+
 include('connection.php');
 require 'PHPMailer.php';
 require 'Exception.php';
@@ -24,11 +30,8 @@ if (isset($_POST['update_tracking'])) {
         $to = $order['email'];
         $subject = "Your Order has been Updated - Tracking Info Included";
         $message = "<h3>Hi " . $order['uname'] . ",</h3>";
-        $message .= "<p>Your order status has been updated to <strong>" . $order_status . "</strong>.</p>";
+        $message .= "<p>Your order placed on <strong>Zufe.com</strong> has been updated. The current status is: <strong>" . $order_status . "</strong>.</p>";
         $message .= "<p><strong>Tracking Number:</strong> " . $tracking_number . "</p>";
-        $message .= "<p><strong>Product:</strong> " . $order['proname'] . "</p>";
-        $message .= "<p><strong>Quantity:</strong> " . $order['proqty'] . "</p>";
-        $message .= "<p><strong>Total Price:</strong> " . $order['total_amount'] . " PKR</p>";
         $message .= "<p>You can <a href='https://yourdomain.com/track_order.php'>track your order</a> using your tracking number.</p>";
         $message .= "<p>Thank you for shopping with us!</p>";
 
@@ -82,40 +85,53 @@ if (isset($_POST['update_tracking'])) {
     <?php include("aside.php"); ?>
 
     <div style="margin-top: 100px; margin-left: 125px;" class="container mb-5">
-        <h1 class="text-center">
-            Completed <span style="color:#28a745">Orders ✔</span>
-        </h1>
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="h3 mb-0 text-gray-800 text-center">
+                    <i class="fas fa-check-circle mr-2 text-success"></i>Completed Orders
+                </h2>
+                <p class="text-muted text-center mt-2">View and manage all completed orders</p>
+            </div>
+        </div>
 
-        <div class="row">
+        <!-- Completed Orders Table -->
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-success">
+                    <i class="fas fa-list mr-2"></i>Completed Orders List
+                </h6>
+            </div>
+            <div class="card-body">
             <div class="table-responsive">
-                <table id="completedOrdersTable" class="table table-bordered table-striped">
+                    <table id="completedOrdersTable" class="table table-bordered table-striped table-hover">
                     <thead style="background-color: #28a745;" class="text-white">
                         <tr>
-                            <th>Image</th>
-                            <th>Prod_ID</th>
-                            <th>Prod_Name</th>
-                            <th>Qty</th>
-                            <th>Price</th>
-                            <th>Color</th>
-                            <th>Size</th>
-                            <th>Shirt Type</th>
-                            <th>Customer</th>
-                            <th>Email</th>
-                            <th>Work Phone</th>
-                            <th>Home Phone</th>
-                            <th>Area</th>
-                            <th>Address</th>
-                            <th>City</th>
-                            <th>Country</th>
-                            <th>Postal Code</th>
-                            <th>Shipping</th>
-                            <th>Tax</th>
-                            <th>Total</th>
-                            <th>Subtotal</th>
-                            <th>Tracking #</th>
-                            <th>Status</th>
-                            <th>Completed At</th>
-                            <th>Action</th>
+                                <th><i class="fas fa-image mr-2"></i>Image</th>
+                                <th><i class="fas fa-hashtag mr-2"></i>Prod_ID</th>
+                                <th><i class="fas fa-box mr-2"></i>Prod_Name</th>
+                                <th><i class="fas fa-cubes mr-2"></i>Qty</th>
+                                <th><i class="fas fa-dollar-sign mr-2"></i>Price</th>
+                                <th><i class="fas fa-palette mr-2"></i>Color</th>
+                                <th><i class="fas fa-ruler mr-2"></i>Size</th>
+                                <th><i class="fas fa-tshirt mr-2"></i>Shirt Type</th>
+                                <th><i class="fas fa-user mr-2"></i>Customer</th>
+                                <th><i class="fas fa-envelope mr-2"></i>Email</th>
+                                <th><i class="fas fa-phone mr-2"></i>Work Phone</th>
+                                <th><i class="fas fa-home mr-2"></i>Home Phone</th>
+                                <th><i class="fas fa-map-marker-alt mr-2"></i>Area</th>
+                                <th><i class="fas fa-address-card mr-2"></i>Address</th>
+                                <th><i class="fas fa-city mr-2"></i>City</th>
+                                <th><i class="fas fa-flag mr-2"></i>Country</th>
+                                <th><i class="fas fa-map-pin mr-2"></i>Postal Code</th>
+                                <th><i class="fas fa-shipping-fast mr-2"></i>Shipping</th>
+                                <th><i class="fas fa-percent mr-2"></i>Tax</th>
+                                <th><i class="fas fa-dollar-sign mr-2"></i>Total</th>
+                                <th><i class="fas fa-calculator mr-2"></i>Subtotal</th>
+                                <th><i class="fas fa-truck mr-2"></i>Tracking #</th>
+                                <th><i class="fas fa-sync-alt mr-2"></i>Status</th>
+                                <th><i class="fas fa-calendar-alt mr-2"></i>Completed At</th>
+                                <th><i class="fas fa-tools mr-2"></i>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -186,7 +202,9 @@ if (isset($_POST['update_tracking'])) {
                                 <td><?= $first['order_status']; ?></td>
                                 <td><?= date('d M Y, h:i A', strtotime($first['completed_at'])); ?></td>
                                 <td>
-                                    <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#statusModal<?= $first['id']; ?>">Update</button>
+                                        <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#statusModal<?= $first['id']; ?>">
+                                            <i class="fas fa-edit mr-1"></i>Update
+                                        </button>
 
                                     <!-- Modal -->
                                     <div class="modal fade" id="statusModal<?= $first['id']; ?>" tabindex="-1" role="dialog">
@@ -214,8 +232,12 @@ if (isset($_POST['update_tracking'])) {
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button type="submit" name="update_tracking" class="btn btn-success">Save</button>
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                            <button type="submit" name="update_tracking" class="btn btn-success">
+                                                                <i class="fas fa-save mr-1"></i>Save
+                                                            </button>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                                <i class="fas fa-times mr-1"></i>Cancel
+                                                            </button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -229,6 +251,8 @@ if (isset($_POST['update_tracking'])) {
                             ?>
                         </tbody>
                 </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

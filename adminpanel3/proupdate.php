@@ -1,4 +1,12 @@
-<?php include("connection.php") ?> <!-- Database connection -->
+<?php
+// Start session and check admin login
+session_start();
+if(isset($_SESSION['admin_username'])==null){
+    echo "<script>location.assign('login.php')</script>";
+}
+
+include("connection.php");
+?> <!-- Database connection -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,8 +35,13 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <div class="row">
-            <h2>Update Product</h2>
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="h3 mb-0 text-gray-800">
+                    <i class="fas fa-edit mr-2 text-primary"></i>Update Product
+                </h2>
+                <p class="text-muted mt-2">Modify product information and specifications</p>
+            </div>
         </div>
 
         <?php
@@ -38,14 +51,14 @@
         } elseif (isset($_POST['id'])) {
             $up = intval($_POST['id']);
         } else {
-            echo "<div class='alert alert-danger'>Product ID is missing.</div>";
+            echo "<div class='alert alert-danger'><i class='fas fa-exclamation-triangle mr-2'></i>Product ID is missing.</div>";
             exit;
         }
 
         // Get product info
         $query = mysqli_query($con, "SELECT * FROM products WHERE id=$up");
         if (!$query || mysqli_num_rows($query) === 0) {
-            echo "<div class='alert alert-danger'>Product not found.</div>";
+            echo "<div class='alert alert-danger'><i class='fas fa-exclamation-triangle mr-2'></i>Product not found.</div>";
             exit;
         }
         $col = mysqli_fetch_assoc($query);
@@ -53,49 +66,70 @@
 
         <!-- Product Update Form -->
         <div class="container">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-box mr-2"></i>Product Information
+                    </h6>
+                </div>
+                <div class="card-body">
             <form action="" method="post" enctype='multipart/form-data'>
                 <input type="hidden" name="id" value="<?= $up ?>">
 
                 <!-- Product Name -->
                 <div class="form-group">
-                    <label>Product Name</label>
-                    <input type="text" name="name" value="<?= htmlspecialchars($col['name']) ?>" class="form-control" required>
+                            <label for="prodName">
+                                <i class="fas fa-tag mr-2 text-primary"></i>Product Name
+                            </label>
+                            <input type="text" name="name" id="prodName" value="<?= htmlspecialchars($col['name']) ?>" class="form-control" required>
                 </div>
 
                 <!-- Description -->
                 <div class="form-group">
-                    <label>Description</label>
-                    <textarea name="description" class="form-control" rows="3" required><?= htmlspecialchars($col['description']) ?></textarea>
+                            <label for="prodDesc">
+                                <i class="fas fa-align-left mr-2 text-primary"></i>Description
+                            </label>
+                            <textarea name="description" id="prodDesc" class="form-control" rows="3" required><?= htmlspecialchars($col['description']) ?></textarea>
                 </div>
 
                 <!-- Price -->
                 <div class="form-group">
-                    <label>Price</label>
-                    <input type="text" name="price" value="<?= htmlspecialchars($col['price']) ?>" class="form-control" required>
+                            <label for="prodPrice">
+                                <i class="fas fa-dollar-sign mr-2 text-primary"></i>Price
+                            </label>
+                            <input type="text" name="price" id="prodPrice" value="<?= htmlspecialchars($col['price']) ?>" class="form-control" required>
                 </div>
 
                 <!-- Quantity -->
                 <div class="form-group">
-                    <label>Quantity</label>
-                    <input type="text" name="qty" value="<?= htmlspecialchars($col['qty']) ?>" class="form-control" required>
+                            <label for="prodQty">
+                                <i class="fas fa-cubes mr-2 text-primary"></i>Quantity
+                            </label>
+                            <input type="text" name="qty" id="prodQty" value="<?= htmlspecialchars($col['qty']) ?>" class="form-control" required>
                 </div>
 
                 <!-- Color -->
                 <div class="form-group">
-                    <label>Colors (comma-separated)</label>
-                    <input type="text" name="colors" value="<?= htmlspecialchars($col['colors']) ?>" class="form-control" placeholder="Red, Blue, Green">
+                            <label for="prodColors">
+                                <i class="fas fa-palette mr-2 text-primary"></i>Colors (comma-separated)
+                            </label>
+                            <input type="text" name="colors" id="prodColors" value="<?= htmlspecialchars($col['colors']) ?>" class="form-control" placeholder="Red, Blue, Green">
                 </div>
 
                 <!-- Shirt Type -->
                 <div class="form-group">
-                    <label>Shirt Type</label>
-                    <input type="text" name="shirt_type" value="<?= htmlspecialchars($col['shirt_type']) ?>" class="form-control" placeholder="e.g., Oversized Tee, Structured Polo">
+                            <label for="prodType">
+                                <i class="fas fa-tshirt mr-2 text-primary"></i>Shirt Type
+                            </label>
+                            <input type="text" name="shirt_type" id="prodType" value="<?= htmlspecialchars($col['shirt_type']) ?>" class="form-control" placeholder="e.g., Oversized Tee, Structured Polo">
                 </div>
 
                 <!-- Size -->
                 <div class="form-group">
-                    <label>Sizes (comma-separated)</label>
-                    <input type="text" name="sizes" value="<?= htmlspecialchars($col['sizes']) ?>" class="form-control" placeholder="S, M, L, XL">
+                            <label for="prodSizes">
+                                <i class="fas fa-ruler mr-2 text-primary"></i>Sizes (comma-separated)
+                            </label>
+                            <input type="text" name="sizes" id="prodSizes" value="<?= htmlspecialchars($col['sizes']) ?>" class="form-control" placeholder="S, M, L, XL">
                 </div>
 
                 <!-- Category -->
@@ -187,8 +221,14 @@
                 </div>
 
                 <!-- Submit Button -->
-                <input type="submit" value="Update Product" class="btn btn-success" name="btn_update">
-                <a href="viewpro.php" class="btn btn-primary">Back to Products</a>
+                <div class="form-group">
+                    <button type="submit" name="btn_update" class="btn btn-success btn-lg">
+                        <i class="fas fa-save mr-2"></i>Update Product
+                    </button>
+                    <a href="viewpro.php" class="btn btn-primary btn-lg ml-2">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Products
+                    </a>
+                </div>
 
             </form>
 

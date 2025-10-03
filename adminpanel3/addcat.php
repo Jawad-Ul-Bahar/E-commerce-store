@@ -1,4 +1,10 @@
 <?php 
+// Start session and check admin login
+session_start();
+if(isset($_SESSION['admin_username'])==null){
+    echo "<script>location.assign('login.php')</script>";
+}
+
 // Database connection
 include("connection.php") 
 ?>
@@ -29,35 +35,63 @@ include("connection.php")
 
         <div class="container-fluid">
             <!-- Page Heading -->
-            <div class="row">
-                <h2>Add Categories</h2>
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="h3 mb-0 text-gray-800">
+                        <i class="fas fa-plus-circle mr-2 text-primary"></i>Add Categories
+                    </h2>
+                    <p class="text-muted mt-2">Create new product categories to organize your inventory</p>
+                </div>
             </div>
 
             <!-- Category Form -->
             <div class="container">
-                <form action="" method="post" enctype='multipart/form-data'>
-
-                    <!-- Category Name -->
-                    <div class="form-group">
-                        <label for="">Category Name</label>
-                        <input type="text" name="name" class="form-control">
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-tags mr-2"></i>Category Information
+                        </h6>
                     </div>
+                    <div class="card-body">
+                        <form action="" method="post" enctype='multipart/form-data'>
 
-                    <!-- Category Description -->
-                    <div class="form-group">
-                        <label for="">Category Description</label>
-                        <input type="text" name="des" class="form-control">
+                            <!-- Category Name -->
+                            <div class="form-group">
+                                <label for="catName">
+                                    <i class="fas fa-tag mr-2 text-primary"></i>Category Name
+                                </label>
+                                <input type="text" name="name" id="catName" class="form-control" placeholder="Enter category name" required>
+                            </div>
+
+                            <!-- Category Description -->
+                            <div class="form-group">
+                                <label for="catDesc">
+                                    <i class="fas fa-align-left mr-2 text-primary"></i>Category Description
+                                </label>
+                                <input type="text" name="des" id="catDesc" class="form-control" placeholder="Enter category description">
+                            </div>
+
+                            <!-- Category Image Upload -->
+                            <div class="form-group">
+                                <label for="catImg">
+                                    <i class="fas fa-image mr-2 text-primary"></i>Category Image
+                                </label>
+                                <input type="file" name="img" id="catImg" class="form-control" accept="image/*" required>
+                                <small class="form-text text-muted">Supported formats: PNG, JPG, JPEG, JFIF</small>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="form-group">
+                                <button type="submit" name="btn_cat" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-save mr-2"></i>Add Category
+                                </button>
+                                <a href="viewcat.php" class="btn btn-secondary btn-lg ml-2">
+                                    <i class="fas fa-eye mr-2"></i>View Categories
+                                </a>
+                            </div>
+                        </form>
                     </div>
-
-                    <!-- Category Image Upload -->
-                    <div class="form-group">
-                        <label for="">Category Image</label>
-                        <input type="file" name="img" class="form-control">
-                    </div>
-
-                    <!-- Submit Button -->
-                    <input type="submit" value="Add" class="btn btn-info" name="btn_cat">
-                </form>
+                </div>
 
                 <?php 
                 // Handle Category Form Submission
@@ -117,8 +151,12 @@ include("connection.php")
 
                 <!-- Modal Footer -->
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                    <a class="btn btn-primary" href="login.html">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </a>
                 </div>
 
             </div>

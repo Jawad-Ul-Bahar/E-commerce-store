@@ -20,7 +20,7 @@
             margin: 0;
             padding: 0;
             height: 100vh;
-            background-image: url('../theme/images/BG-L2.png'); /* Same BG */
+            background-image: url('../images/BG-L2.png'); /* Same BG */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;

@@ -11,7 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
         <div class="sidebar-brand-icon rotate-n-15">
             <i class="fas fa-store-alt"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">ZUFÉ</div>
+        <div class="sidebar-brand-text mx-3">ZUFÉ ADMIN</div>
     </a>
 
     <!-- Divider -->
@@ -25,7 +25,7 @@ if (session_status() === PHP_SESSION_NONE) {
         </a>
     </li>
 
-    <!-- <?php if(isset($_SESSION['username']) && $_SESSION['userrole']=='admin'){ ?> -->
+    <!-- <?php if(isset($_SESSION['admin_username']) && $_SESSION['admin_userrole']=='admin'){ ?> -->
     
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -37,14 +37,18 @@ if (session_status() === PHP_SESSION_NONE) {
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCategories"
             aria-expanded="true" aria-controls="collapseCategories">
-            <i class="fas fa-fw fa-cog"></i>
+            <i class="fas fa-fw fa-tags"></i>
             <span>Categories</span>
         </a>
         <div id="collapseCategories" class="collapse" aria-labelledby="headingCategories" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Components:</h6>
-                <a class="collapse-item" href="addcat.php">Add Category</a>
-                <a class="collapse-item" href="viewcat.php">View Category</a>
+                <h6 class="collapse-header">Category Management:</h6>
+                <a class="collapse-item" href="addcat.php">
+                    <i class="fas fa-plus fa-fw mr-2"></i>Add Category
+                </a>
+                <a class="collapse-item" href="viewcat.php">
+                    <i class="fas fa-eye fa-fw mr-2"></i>View Categories
+                </a>
             </div>
         </div>
     </li>
@@ -53,14 +57,18 @@ if (session_status() === PHP_SESSION_NONE) {
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
             aria-expanded="true" aria-controls="collapseProducts">
-            <i class="fas fa-fw fa-wrench"></i>
+            <i class="fas fa-fw fa-box"></i>
             <span>Products</span>
         </a>
         <div id="collapseProducts" class="collapse" aria-labelledby="headingProducts" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Custom Utilities:</h6>
-                <a class="collapse-item" href="addpro.php">Add Product</a>
-                <a class="collapse-item" href="viewpro.php">View Product</a>
+                <h6 class="collapse-header">Product Management:</h6>
+                <a class="collapse-item" href="addpro.php">
+                    <i class="fas fa-plus fa-fw mr-2"></i>Add Product
+                </a>
+                <a class="collapse-item" href="viewpro.php">
+                    <i class="fas fa-eye fa-fw mr-2"></i>View Products
+                </a>
             </div>
         </div>
     </li>
@@ -68,7 +76,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <!-- Nav Item - Manage Delivery -->
     <li class="nav-item active">
         <a class="nav-link" href="manage_delivery.php">
-            <i class="fas fa-fw fa-wrench"></i>
+            <i class="fas fa-fw fa-truck"></i>
             <span>Manage Delivery</span>
         </a>
     </li>
@@ -78,15 +86,23 @@ if (session_status() === PHP_SESSION_NONE) {
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSalePerformance"
             aria-expanded="true" aria-controls="collapseSalePerformance">
             <i class="fas fa-fw fa-chart-line"></i>
-            <span>Sale Performance</span>
+            <span>Sales & Orders</span>
         </a>
         <div id="collapseSalePerformance" class="collapse" aria-labelledby="headingSalePerformance" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Sale Performance</h6>
-                <a class="collapse-item" href="orders_details.php">Order list</a>
-                <a class="collapse-item" href="complete_order.php">Completed Order</a>
-                <a class="collapse-item" href="sales_report.php">Sale Report</a>
-                <a class="collapse-item" href="deleted_orders.php">Deleted Orders</a>
+                <h6 class="collapse-header">Order Management:</h6>
+                <a class="collapse-item" href="orders_details.php">
+                    <i class="fas fa-list fa-fw mr-2"></i>Order List
+                </a>
+                <a class="collapse-item" href="complete_order.php">
+                    <i class="fas fa-check-circle fa-fw mr-2"></i>Completed Orders
+                </a>
+                <a class="collapse-item" href="sales_report.php">
+                    <i class="fas fa-chart-bar fa-fw mr-2"></i>Sales Report
+                </a>
+                <a class="collapse-item" href="deleted_orders.php">
+                    <i class="fas fa-trash fa-fw mr-2"></i>Deleted Orders
+                </a>
             </div>
         </div>
     </li>
@@ -108,9 +124,13 @@ if (session_status() === PHP_SESSION_NONE) {
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Login Screens:</h6>
-                <a class="collapse-item" href="login.php">Login</a>
-                <a class="collapse-item" href="register.php">Register</a>
+                <h6 class="collapse-header">Authentication:</h6>
+                <a class="collapse-item" href="login.php">
+                    <i class="fas fa-sign-in-alt fa-fw mr-2"></i>Login
+                </a>
+                <a class="collapse-item" href="register.php">
+                    <i class="fas fa-user-plus fa-fw mr-2"></i>Register
+                </a>
             </div>
         </div>
     </li>
@@ -122,14 +142,18 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <!-- Sidebar Toggler -->
     <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        <button class="rounded-circle border-0" id="sidebarToggle">
+            <i class="fas fa-angle-left"></i>
+        </button>
     </div>
 
     <!-- Sidebar Message -->
     <div class="sidebar-card d-none d-lg-flex">
         <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-        <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+        <p class="text-center mb-2"><strong>ZUFÉ Admin</strong> - Professional E-commerce Management</p>
+        <a class="btn btn-success btn-sm" href="index.php">
+            <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+        </a>
     </div>
 </ul>
 
@@ -293,7 +317,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                            <?php echo $_SESSION['username']; ?>
+                            <?php echo $_SESSION['admin_username']; ?>
                         </span>
                         <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                     </a>

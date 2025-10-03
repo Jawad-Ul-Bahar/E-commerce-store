@@ -1,4 +1,10 @@
 <?php
+// Start session and check admin login
+session_start();
+if(isset($_SESSION['admin_username'])==null){
+    echo "<script>location.assign('login.php')</script>";
+}
+
 include('connection.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -29,37 +35,52 @@ require 'Exception.php';
     <?php include("aside.php"); ?>
 
     <div style="margin-top: 100px; margin-left: 125px" class="container mb-5">
-        <h2 class="text-center">Orders Detail</h2>
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="h3 mb-0 text-gray-800 text-center">
+                    <i class="fas fa-shopping-cart mr-2 text-primary"></i>Orders Detail
+                </h2>
+                <p class="text-muted text-center mt-2">Manage and track all customer orders</p>
+            </div>
+        </div>
 
-        <div class="row">
+        <!-- Orders Table -->
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-list mr-2"></i>Order List
+                </h6>
+            </div>
+            <div class="card-body">
             <div class="table-responsive">
-                <table id="ordersTable" class="table table-bordered table-striped">
+                    <table id="ordersTable" class="table table-bordered table-striped table-hover">
                    <thead style="background-color: #009efb;" class="text-white">
     <tr>
-        <th>Product</th>
-        <th>Image</th>
-        <th>Qty</th>
-        <th>Price</th>
-        <th>Color</th>
-        <th>Size</th>
-        <th>Shirt Type</th>
-        <th>Customer</th>
-        <th>Email</th>
-        <th>Work Phone</th>
-        <th>Home Phone</th>
-        <th>Area</th>
-        <th>Address</th>
-        <th>City</th>
-        <th>Country</th>
-        <th>Postal Code</th>
-        <th>Shipping</th>
-        <th>Tax</th>
-        <th>Total</th>
-        <th>Subtotal</th>
-        <th>Tracking #</th>
-        <th>Cancel Reason</th>
-        <th>Order At</th>
-        <th>Action</th>
+        <th><i class="fas fa-box mr-2"></i>Product</th>
+        <th><i class="fas fa-image mr-2"></i>Image</th>
+        <th><i class="fas fa-cubes mr-2"></i>Qty</th>
+        <th><i class="fas fa-dollar-sign mr-2"></i>Price</th>
+        <th><i class="fas fa-palette mr-2"></i>Color</th>
+        <th><i class="fas fa-ruler mr-2"></i>Size</th>
+        <th><i class="fas fa-tshirt mr-2"></i>Shirt Type</th>
+        <th><i class="fas fa-user mr-2"></i>Customer</th>
+        <th><i class="fas fa-envelope mr-2"></i>Email</th>
+        <th><i class="fas fa-phone mr-2"></i>Work Phone</th>
+        <th><i class="fas fa-home mr-2"></i>Home Phone</th>
+        <th><i class="fas fa-map-marker mr-2"></i>Area</th>
+        <th><i class="fas fa-map mr-2"></i>Address</th>
+        <th><i class="fas fa-city mr-2"></i>City</th>
+        <th><i class="fas fa-flag mr-2"></i>Country</th>
+        <th><i class="fas fa-mailbox mr-2"></i>Postal Code</th>
+        <th><i class="fas fa-shipping-fast mr-2"></i>Shipping</th>
+        <th><i class="fas fa-percentage mr-2"></i>Tax</th>
+        <th><i class="fas fa-calculator mr-2"></i>Total</th>
+        <th><i class="fas fa-receipt mr-2"></i>Subtotal</th>
+        <th><i class="fas fa-barcode mr-2"></i>Tracking #</th>
+        <th><i class="fas fa-comment mr-2"></i>Cancel Reason</th>
+        <th><i class="fas fa-clock mr-2"></i>Order At</th>
+        <th><i class="fas fa-cogs mr-2"></i>Action</th>
     </tr>
 </thead>
                     <tbody>
@@ -199,21 +220,22 @@ $shippingHTML = $taxHTML = $totalHTML = ''; // 👈 add these
                                 $mail->Body = "
                                     <h3>Order Cancelled</h3>
                                     <p>Hello <strong>$userName</strong>,</p>
-                                    <p>Your cancelled order <strong>$tracking</strong> has now been removed from our system.</p>
+                                    <p>Your cancelled order <strong>$tracking</strong> placed on <strong>Zufe.com</strong> has now been removed from our system.</p>
                                     <p>No further action is required from your side.</p>
-                                    <p>Thank you,<br>Support Team</p>
+                                    <p>Thank you,<br>Support Team<br><strong>Zufe.com</strong></p>
                                 ";
-                            } else {
+                            }
+                             else {
                                 $mail->Subject = 'Your order has been cancelled by admin';
                                 $mail->Body = "
                                     <h3>Order Cancelled</h3>
                                     <p>Hello <strong>$userName</strong>,</p>
-                                    <p>We regret to inform you that your order <strong>$tracking</strong> has been cancelled by our team due to unforeseen circumstances.</p>
+                                    <p>We regret to inform you that your order <strong>$tracking</strong> placed on <strong>Zufe.com</strong> has been cancelled by our team due to unforeseen circumstances.</p>
                                     <p>If you have any questions, feel free to reach out:</p>
                                     <p><strong>Email:</strong> $adminEmail<br>
                                     <strong>Phone:</strong> $adminPhone</p>
-                                    <p>Thank you,<br>Support Team</p>
-                                ";
+                                    <p>Thank you,<br>Support Team<br><strong>Zufe.com</strong></p>
+                                                                    ";
                             }
 
                             $mail->send();

@@ -1,4 +1,13 @@
-<?php include("connection.php") ?> <!-- Database connection -->
+<?php 
+// Start session and check admin login
+session_start();
+if(isset($_SESSION['admin_username'])==null){
+    echo "<script>location.assign('login.php')</script>";
+}
+
+// Database connection
+include("connection.php") 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,106 +36,153 @@
     <div class="container-fluid">
 
         <!-- Page Heading -->
-        <div class="row">
-            <h2>Add Product</h2>
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="h3 mb-0 text-gray-800">
+                    <i class="fas fa-plus-circle mr-2 text-primary"></i>Add Product
+                </h2>
+                <p class="text-muted mt-2">Add new products to your inventory with detailed specifications</p>
+            </div>
         </div>
 
         <!-- Product Add Form -->
         <div class="container">
-            <form action="" method="post" enctype='multipart/form-data'>
-
-                <!-- Product Name -->
-                <div class="form-group">
-                    <label>Product Name</label>
-                    <input type="text" name="name" class="form-control" required>
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-box mr-2"></i>Product Information
+                    </h6>
                 </div>
+                <div class="card-body">
+                    <form action="" method="post" enctype='multipart/form-data'>
 
-                <!-- Description -->
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea name="description" class="form-control" rows="3" required></textarea>
-                </div>
+                        <!-- Product Name -->
+                        <div class="form-group">
+                            <label for="prodName">
+                                <i class="fas fa-tag mr-2 text-primary"></i>Product Name
+                            </label>
+                            <input type="text" name="name" id="prodName" class="form-control" placeholder="Enter product name" required>
+                        </div>
 
-                <!-- Price -->
-                <div class="form-group">
-                    <label>Price</label>
-                    <input type="text" name="price" class="form-control" required>
-                </div>
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label for="prodDesc">
+                                <i class="fas fa-align-left mr-2 text-primary"></i>Description
+                            </label>
+                            <textarea name="description" id="prodDesc" class="form-control" rows="3" placeholder="Enter product description" required></textarea>
+                        </div>
 
-                <!-- Quantity -->
-                <div class="form-group">
-                    <label>Quantity</label>
-                    <input type="text" name="qty" class="form-control" required>
-                </div>
+                        <!-- Price -->
+                        <div class="form-group">
+                            <label for="prodPrice">
+                                <i class="fas fa-dollar-sign mr-2 text-primary"></i>Price
+                            </label>
+                            <input type="text" name="price" id="prodPrice" class="form-control" placeholder="Enter product price" required>
+                        </div>
 
-                <!-- Color -->
-                <div class="form-group">
-                    <label>Colors (comma-separated)</label>
-                    <input type="text" name="colors" class="form-control" placeholder="Red, Blue, Green">
-                </div>
+                        <!-- Quantity -->
+                        <div class="form-group">
+                            <label for="prodQty">
+                                <i class="fas fa-cubes mr-2 text-primary"></i>Quantity
+                            </label>
+                            <input type="text" name="qty" id="prodQty" class="form-control" placeholder="Enter available quantity" required>
+                        </div>
 
-                <!-- Shirt Type -->
-                <div class="form-group">
-                    <label>Shirt Type</label>
-                    <input type="text" name="shirt_type" class="form-control" placeholder="e.g., Oversized Tee, Structured Polo">
-                </div>
+                        <!-- Color -->
+                        <div class="form-group">
+                            <label for="prodColors">
+                                <i class="fas fa-palette mr-2 text-primary"></i>Colors (comma-separated)
+                            </label>
+                            <input type="text" name="colors" id="prodColors" class="form-control" placeholder="Red, Blue, Green">
+                        </div>
 
-                <!-- Size -->
-                <div class="form-group">
-                    <label>Sizes (comma-separated)</label>
-                    <input type="text" name="sizes" class="form-control" placeholder="S, M, L, XL">
-                </div>
+                        <!-- Shirt Type -->
+                        <div class="form-group">
+                            <label for="prodType">
+                                <i class="fas fa-tshirt mr-2 text-primary"></i>Shirt Type
+                            </label>
+                            <input type="text" name="shirt_type" id="prodType" class="form-control" placeholder="e.g., Oversized Tee, Structured Polo">
+                        </div>
 
-                <!-- Category -->
-                <div class="form-group">
-                    <label>Category</label>
-                    <select name="cat" class="form-control">
-                        <option value="">Select Category</option>
-                        <?php 
-                        $q = mysqli_query($con, "SELECT * FROM categories");
-                        while($cat = mysqli_fetch_array($q)){
-                            echo "<option value='{$cat[0]}'>{$cat[1]}</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                        <!-- Size -->
+                        <div class="form-group">
+                            <label for="prodSizes">
+                                <i class="fas fa-ruler mr-2 text-primary"></i>Sizes (comma-separated)
+                            </label>
+                            <input type="text" name="sizes" id="prodSizes" class="form-control" placeholder="S, M, L, XL">
+                        </div>
 
-                <!-- Tax Percentage -->
-                <div class="form-group">
-                    <label>Tax Percentage (%)</label>
-                    <input type="number" name="tax_percent" class="form-control" step="0.01" placeholder="e.g., 5 or 12.5">
-                </div>
-
-                <!-- Show Tax -->
-                <div class="form-group">
-                    <label>Show Tax Separately?</label>
-                    <select name="show_tax" class="form-control">
-                        <option value="0">No</option>
-                        <option value="1">Yes</option>
-                    </select>
-                </div>
-
-                <!-- Product Images -->
-                <div class="form-group">
-                    <label>Product Images (color-wise)</label>
-                    <p class="text-muted"><small><b>Note:</b> For each color variant, upload two images — one front view and one back view <b>(for hover effect)</b>. Set the image that should appear on hover as <b>Back</b> in the dropdown.</small></p>
-                    <div id="img-group">
-                        <div class="input-group mb-2">
-                            <input type="file" name="img[]" class="form-control" required>
-                            <input type="text" name="img_color[]" class="form-control" placeholder="Color name: Use exact names given above.">
-                            <select name="img_type[]" class="form-control" required>
-                                <option value="front">Front</option>
-                                <option value="back">Back</option>
+                        <!-- Category -->
+                        <div class="form-group">
+                            <label for="prodCat">
+                                <i class="fas fa-folder mr-2 text-primary"></i>Category
+                            </label>
+                            <select name="cat" id="prodCat" class="form-control">
+                                <option value="">Select Category</option>
+                                <?php 
+                                $q = mysqli_query($con, "SELECT * FROM categories");
+                                while($cat = mysqli_fetch_array($q)){
+                                    echo "<option value='{$cat[0]}'>{$cat[1]}</option>";
+                                }
+                                ?>
                             </select>
                         </div>
-                    </div>
-                    <button type="button" id="addMoreBtn" class="btn btn-sm btn-secondary">+ Add More</button>
+
+                        <!-- Tax Percentage -->
+                        <div class="form-group">
+                            <label for="prodTax">
+                                <i class="fas fa-percentage mr-2 text-primary"></i>Tax Percentage (%)
+                            </label>
+                            <input type="number" name="tax_percent" id="prodTax" class="form-control" step="0.01" placeholder="e.g., 5 or 12.5">
+                        </div>
+
+                        <!-- Show Tax -->
+                        <div class="form-group">
+                            <label for="prodShowTax">
+                                <i class="fas fa-eye mr-2 text-primary"></i>Show Tax Separately?
+                            </label>
+                            <select name="show_tax" id="prodShowTax" class="form-control">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                            </select>
+                        </div>
+
+                        <!-- Product Images -->
+                        <div class="form-group">
+                            <label>
+                                <i class="fas fa-images mr-2 text-primary"></i>Product Images (color-wise)
+                            </label>
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle mr-2"></i>
+                                <strong>Note:</strong> For each color variant, upload two images — one front view and one back view <strong>(for hover effect)</strong>. Set the image that should appear on hover as <strong>Back</strong> in the dropdown.
+                            </div>
+                            <div id="img-group">
+                                <div class="input-group mb-2">
+                                    <input type="file" name="img[]" class="form-control" required>
+                                    <input type="text" name="img_color[]" class="form-control" placeholder="Color name: Use exact names given above.">
+                                    <select name="img_type[]" class="form-control" required>
+                                        <option value="front">Front</option>
+                                        <option value="back">Back</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="button" id="addMoreBtn" class="btn btn-sm btn-secondary">
+                                <i class="fas fa-plus mr-1"></i>Add More
+                            </button>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="form-group">
+                            <button type="submit" name="btn_pro" class="btn btn-primary btn-lg">
+                                <i class="fas fa-save mr-2"></i>Add Product
+                            </button>
+                            <a href="viewpro.php" class="btn btn-secondary btn-lg ml-2">
+                                <i class="fas fa-eye mr-2"></i>View Products
+                            </a>
+                        </div>
+                    </form>
                 </div>
-
-                <!-- Submit Button -->
-                <input type="submit" value="Add Product" class="btn btn-info" name="btn_pro">
-
-            </form>
+            </div>
 
             <?php
             if (isset($_POST['btn_pro'])) {

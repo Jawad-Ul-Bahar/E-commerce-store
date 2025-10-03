@@ -1,5 +1,12 @@
-<?php
-include('connection.php');
+<?php 
+// Start session and check admin login
+session_start();
+if(isset($_SESSION['admin_username'])==null){
+    echo "<script>location.assign('login.php')</script>";
+}
+
+// Database connection
+include("connection.php"); 
 
 /* ---- Delete product if ?del=id is present ---- */
 if (isset($_GET['del'])) {
@@ -37,44 +44,81 @@ $q = mysqli_query($con, "SELECT * FROM products") or die(mysqli_error($con));
         <!-- Main Content -->
         <div id="content">
             <div class="container-fluid">
-                <h2 class="h3 mb-4 text-gray-800">Products</h2>
+                <!-- Page Heading -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="h3 mb-0 text-gray-800">
+                            <i class="fas fa-box mr-2 text-primary"></i>Products
+                        </h2>
+                        <p class="text-muted mt-2">Manage your product inventory and specifications</p>
+                    </div>
+                </div>
 
-                <div class="table-responsive">
-                    <table class="table table-striped align-middle">
-                        <thead class="table-primary">
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Color</th>
-                            <th>Shirt Type</th>
-                            <th>Size</th>
-                            <th>Category</th>
-                            <th>Tax %</th>
-                            <th>Show Tax</th>
-                            <th>Images</th>
-                            <th style="width:160px;">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php while ($pro = mysqli_fetch_assoc($q)) { ?>
-                           <tr>
-    <td><?= htmlspecialchars($pro['name']) ?></td>
-    <td><?= htmlspecialchars($pro['description']) ?></td>
-    <td><?= htmlspecialchars($pro['price']) ?></td>
-    <td><?= htmlspecialchars($pro['qty']) ?></td>
-    <td><?= htmlspecialchars($pro['colors']) ?></td>
-    <td><?= htmlspecialchars($pro['shirt_type']) ?></td>
-    <td><?= htmlspecialchars($pro['sizes']) ?></td>
-    <td><?= htmlspecialchars($pro['cat_id']) ?></td>
-    <td><?= htmlspecialchars($pro['tax_percent']) ?>%</td>
-    <td><?= $pro['show_tax'] == 1 ? 'Yes' : 'No' ?></td>
-    <td>
-        <?php 
-        $pid = $pro['id'];
-        $img_query = mysqli_query($con, "SELECT * FROM product_images WHERE product_id = $pid");
-        $images_by_color = [];
+                <!-- Add Product Button -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <a href="addpro.php" class="btn btn-primary">
+                            <i class="fas fa-plus mr-2"></i>Add New Product
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <i class="fas fa-list mr-2"></i>Product List
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th><i class="fas fa-tag mr-2"></i>Name</th>
+                                    <th><i class="fas fa-align-left mr-2"></i>Description</th>
+                                    <th><i class="fas fa-dollar-sign mr-2"></i>Price</th>
+                                    <th><i class="fas fa-cubes mr-2"></i>Quantity</th>
+                                    <th><i class="fas fa-palette mr-2"></i>Color</th>
+                                    <th><i class="fas fa-tshirt mr-2"></i>Shirt Type</th>
+                                    <th><i class="fas fa-ruler mr-2"></i>Size</th>
+                                    <th><i class="fas fa-folder mr-2"></i>Category</th>
+                                    <th><i class="fas fa-percentage mr-2"></i>Tax %</th>
+                                    <th><i class="fas fa-eye mr-2"></i>Show Tax</th>
+                                    <th><i class="fas fa-images mr-2"></i>Images</th>
+                                    <th><i class="fas fa-cogs mr-2"></i>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php while ($pro = mysqli_fetch_assoc($q)) { ?>
+                                   <tr>
+        <td>
+            <strong class="text-primary"><?= htmlspecialchars($pro['name']) ?></strong>
+        </td>
+        <td><?= htmlspecialchars($pro['description']) ?></td>
+        <td>
+            <span class="badge badge-success">₨<?= htmlspecialchars($pro['price']) ?></span>
+        </td>
+        <td>
+            <span class="badge badge-info"><?= htmlspecialchars($pro['qty']) ?></span>
+        </td>
+        <td><?= htmlspecialchars($pro['colors']) ?></td>
+        <td><?= htmlspecialchars($pro['shirt_type']) ?></td>
+        <td><?= htmlspecialchars($pro['sizes']) ?></td>
+        <td><?= htmlspecialchars($pro['cat_id']) ?></td>
+        <td><?= htmlspecialchars($pro['tax_percent']) ?>%</td>
+        <td>
+            <?php if($pro['show_tax'] == 1): ?>
+                <span class="badge badge-success">Yes</span>
+            <?php else: ?>
+                <span class="badge badge-secondary">No</span>
+            <?php endif; ?>
+        </td>
+        <td>
+            <?php 
+            $pid = $pro['id'];
+            $img_query = mysqli_query($con, "SELECT * FROM product_images WHERE product_id = $pid");
+            $images_by_color = [];
 while ($img = mysqli_fetch_assoc($img_query)) {
     $color = $img['color'];
     $type = $img['type']; // front/back
@@ -100,17 +144,26 @@ foreach ($images_by_color as $color => $types) {
     echo "</div>";
 }
 
-        ?>
-    </td>
-    <td>
-        <a href="proupdate.php?pupdate=<?= $pro['id'] ?>" class="btn btn-info btn-sm">Update</a>
-        <a href="viewpro.php?del=<?= $pro['id'] ?>" onclick="return confirm('Delete this product?');" class="btn btn-danger btn-sm">Delete</a>
-    </td>
-</tr>
+            ?>
+        </td>
+        <td>
+            <div class="btn-group" role="group">
+                <a href="proupdate.php?pupdate=<?= $pro['id'] ?>" class="btn btn-info btn-sm">
+                    <i class="fas fa-edit mr-1"></i>Update
+                </a>
+                <a href="viewpro.php?del=<?= $pro['id'] ?>" class="btn btn-danger btn-sm" 
+                   onclick="return confirm('Are you sure you want to delete this product?')">
+                    <i class="fas fa-trash mr-1"></i>Delete
+                </a>
+            </div>
+        </td>
+    </tr>
 
-                        <?php } ?>
-                        </tbody>
-                    </table>
+                                <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
             </div><!-- /.container-fluid -->

@@ -1,4 +1,10 @@
 <?php
+// Start session and check admin login
+session_start();
+if(isset($_SESSION['admin_username'])==null){
+    echo "<script>location.assign('login.php')</script>";
+}
+
 include('connection.php');
 ?>
 
@@ -22,37 +28,52 @@ include('connection.php');
     <?php include("aside.php"); ?>
 
     <div style="margin-top: 100px; margin-left: 125px" class="container mb-5">
-        <h2 class="text-center">Deleted Orders</h2>
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="h3 mb-0 text-gray-800 text-center">
+                    <i class="fas fa-trash mr-2 text-danger"></i>Deleted Orders
+                </h2>
+                <p class="text-muted text-center mt-2">View and manage all cancelled and deleted orders</p>
+            </div>
+        </div>
 
-        <div class="row">
+        <!-- Deleted Orders Table -->
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-danger">
+                    <i class="fas fa-list mr-2"></i>Deleted Orders List
+                </h6>
+            </div>
+            <div class="card-body">
             <div class="table-responsive">
-                <table id="deletedOrdersTable" class="table table-bordered table-striped">
+                    <table id="deletedOrdersTable" class="table table-bordered table-striped table-hover">
                     <thead style="background-color: #dc3545;" class="text-white">
                     <tr>
-                        <th>Product</th>
-                        <th>Image</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Color</th>
-                        <th>Size</th>
-                        <th>Shirt Type</th>
-                        <th>Customer</th>
-                        <th>Email</th>
-                        <th>Work Phone</th>
-                        <th>Home Phone</th>
-                        <th>Area</th>
-                        <th>Address</th>
-                        <th>City</th>
-                        <th>Country</th>
-                        <th>Postal Code</th>
-                        <th>Shipping</th>
-                        <th>Tax</th>
-                        <th>Total</th>
-                        <th>Tracking #</th>
-                        <th>Cancel Reason</th>
-                        <th>Status</th>
-                        <th>Order At</th>
-                        <th>Deleted At</th>
+                            <th><i class="fas fa-box mr-2"></i>Product</th>
+                            <th><i class="fas fa-image mr-2"></i>Image</th>
+                            <th><i class="fas fa-cubes mr-2"></i>Qty</th>
+                            <th><i class="fas fa-dollar-sign mr-2"></i>Price</th>
+                            <th><i class="fas fa-palette mr-2"></i>Color</th>
+                            <th><i class="fas fa-ruler mr-2"></i>Size</th>
+                            <th><i class="fas fa-tshirt mr-2"></i>Shirt Type</th>
+                            <th><i class="fas fa-user mr-2"></i>Customer</th>
+                            <th><i class="fas fa-envelope mr-2"></i>Email</th>
+                            <th><i class="fas fa-phone mr-2"></i>Work Phone</th>
+                            <th><i class="fas fa-home mr-2"></i>Home Phone</th>
+                            <th><i class="fas fa-map-marker mr-2"></i>Area</th>
+                            <th><i class="fas fa-map mr-2"></i>Address</th>
+                            <th><i class="fas fa-city mr-2"></i>City</th>
+                            <th><i class="fas fa-flag mr-2"></i>Country</th>
+                            <th><i class="fas fa-mailbox mr-2"></i>Postal Code</th>
+                            <th><i class="fas fa-shipping-fast mr-2"></i>Shipping</th>
+                            <th><i class="fas fa-percentage mr-2"></i>Tax</th>
+                            <th><i class="fas fa-calculator mr-2"></i>Total</th>
+                            <th><i class="fas fa-barcode mr-2"></i>Tracking #</th>
+                            <th><i class="fas fa-comment mr-2"></i>Cancel Reason</th>
+                            <th><i class="fas fa-exclamation-triangle mr-2"></i>Status</th>
+                            <th><i class="fas fa-clock mr-2"></i>Order At</th>
+                            <th><i class="fas fa-calendar-times mr-2"></i>Deleted At</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -68,14 +89,14 @@ include('connection.php');
                     while ($data = mysqli_fetch_array($q)) {
                     ?>
                     <tr>
-                        <td><?= $data['product_name'] ?? 'N/A'; ?></td>
-                        <td><img src="../adminpanel3/img/<?= htmlspecialchars($data['product_img']); ?>" width="60" height="70" class="rounded"></td>
-                        <td><?= $data['proqty']; ?></td>
-                        <td><?= $data['proprice']; ?> PKR</td>
+                            <td><strong class="text-primary"><?= $data['product_name'] ?? 'N/A'; ?></strong></td>
+                            <td><img src="../adminpanel3/img/<?= htmlspecialchars($data['product_img']); ?>" width="60" height="70" class="rounded img-thumbnail"></td>
+                            <td><span class="badge badge-info"><?= $data['proqty']; ?></span></td>
+                            <td><span class="text-success font-weight-bold"><?= $data['proprice']; ?> PKR</span></td>
                         <td><?= $data['selected_color'] ?? '-'; ?></td>
                         <td><?= $data['selected_size'] ?? '-'; ?></td>
                         <td><?= $data['shirt_type'] ?? '-'; ?></td>
-                        <td><?= $data['uname']; ?></td>
+                            <td><strong class="text-primary"><?= $data['uname']; ?></strong></td>
                         <td><?= $data['email']; ?></td>
                         <td><?= $data['work_phone']; ?></td>
                         <td><?= $data['home_phone'] ?? '-'; ?></td>
@@ -86,7 +107,7 @@ include('connection.php');
                         <td><?= $data['postal_code'] ?? '-'; ?></td>
                         <td><?= $data['shipping_charges'] ?? '0'; ?> PKR</td>
                         <td><?= $data['item_tax'] ?? '0'; ?> PKR</td>
-                        <td><?= $data['total_amount'] ?? '0'; ?> PKR</td>
+                            <td><span class="text-primary font-weight-bold"><?= $data['total_amount'] ?? '0'; ?> PKR</span></td>
                         <td><span class="badge badge-info"><?= $data['tracking_number'] ?? 'N/A'; ?></span></td>
                         <td><?= $data['cancel_reason'] ?? '-'; ?></td>
                         <td><span class="badge badge-danger">Cancelled</span></td>
@@ -97,6 +118,7 @@ include('connection.php');
 
                     </tbody>
                 </table>
+                </div>
             </div>
         </div>
     </div>

@@ -1,6 +1,12 @@
-<?php include('connection.php'); // Include DB connection ?>
-
 <?php
+// Start session and check admin login
+session_start();
+if(isset($_SESSION['admin_username'])==null){
+    echo "<script>location.assign('login.php')</script>";
+}
+
+include("connection.php");
+
 // Fetch category details for update form
 if (isset($_GET['up'])) {
     $up = $_GET['up'];
@@ -36,28 +42,58 @@ if (isset($_GET['up'])) {
     <!-- Page Content -->
     <div class="container-fluid">
         <div class="container mt-5">
-            <h2 class="text-center text-primary">Update Record</h2>
+            <!-- Page Header -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="h3 mb-0 text-gray-800 text-center">
+                        <i class="fas fa-edit mr-2 text-primary"></i>Update Category
+                    </h2>
+                    <p class="text-muted text-center mt-2">Modify category information and image</p>
+                </div>
+            </div>
 
             <!-- Update Category Form -->
-            <form action="" method="POST" enctype="multipart/form-data" class="bg-white p-4 rounded shadow">
-                <div class="mb-3">
-                    <label class="form-label">Cat_Name</label>
-                    <input type="text" name="name" value="<?php echo $col[1] ?>" class="form-control" required>
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-tags mr-2"></i>Category Information
+                    </h6>
                 </div>
+                <div class="card-body">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="catName">
+                                <i class="fas fa-tag mr-2 text-primary"></i>Category Name
+                            </label>
+                            <input type="text" name="name" id="catName" value="<?php echo $col[1] ?>" class="form-control" required>
+                        </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Description</label>
-                    <input type="text" name="description" value="<?php echo $col[2] ?>" class="form-control" required>
+                        <div class="form-group">
+                            <label for="catDesc">
+                                <i class="fas fa-align-left mr-2 text-primary"></i>Description
+                            </label>
+                            <input type="text" name="description" id="catDesc" value="<?php echo $col[2] ?>" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="catImg">
+                                <i class="fas fa-image mr-2 text-primary"></i>Image
+                            </label>
+                            <input type="file" name="image" id="catImg" class="form-control" accept="image/*" required>
+                            <small class="form-text text-muted">Supported formats: PNG, JPG, JPEG, JFIF, WEBP</small>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" name="update" class="btn btn-success btn-lg">
+                                <i class="fas fa-save mr-2"></i>Update Category
+                            </button>
+                            <a href="viewcat.php" class="btn btn-primary btn-lg ml-2">
+                                <i class="fas fa-eye mr-2"></i>View Categories
+                            </a>
+                        </div>
+                    </form>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Image</label>
-                    <input type="file" name="image" class="form-control" required>
-                </div>
-
-                <input class="btn btn-success" type="submit" value="Update" name="update">
-                <a href="viewcat.php" class="btn text-white" style="background-color: #4e73df;">View Record</a>
-            </form>
+            </div>
         </div>
     </div>
 
@@ -122,8 +158,12 @@ if (isset($_GET['up'])) {
             </div>
             <div class="modal-body">Select "Logout" below if you are ready to end your session.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.php">Logout</a>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                    <i class="fas fa-times mr-2"></i>Cancel
+                </button>
+                <a class="btn btn-primary" href="login.php">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                </a>
             </div>
         </div>
     </div>

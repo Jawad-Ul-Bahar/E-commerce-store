@@ -1,6 +1,12 @@
 <?php 
-// Include database connection
-include("connection.php")
+// Start session and check admin login
+session_start();
+if(isset($_SESSION['admin_username'])==null){
+    echo "<script>location.assign('login.php')</script>";
+}
+
+// Database connection
+include("connection.php") 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,18 +36,42 @@ include("connection.php")
         <?php include("aside.php"); ?>
 
         <!-- Main Content Start -->
-        <div class="container">
+        <div class="container-fluid">
+            <!-- Page Heading -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="h3 mb-0 text-gray-800">
+                        <i class="fas fa-tags mr-2 text-primary"></i>Categories
+                    </h2>
+                    <p class="text-muted mt-2">Manage and organize your product categories</p>
+                </div>
+            </div>
 
+            <!-- Add Category Button -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <a href="addcat.php" class="btn btn-primary">
+                        <i class="fas fa-plus mr-2"></i>Add New Category
+                    </a>
+                </div>
+            </div>
 
             <!-- Category Table -->
-             <h2 class="text-left text-dark mb-4">Categories</h2>
-            <table class="table table-striped table-inverse table-responsive">
-                <thead class="thead-inverse">
-                    <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Image</th>
-                        <th>Action</th>
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        <i class="fas fa-list mr-2"></i>Category List
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th><i class="fas fa-tag mr-2"></i>Name</th>
+                                    <th><i class="fas fa-align-left mr-2"></i>Description</th>
+                                    <th><i class="fas fa-image mr-2"></i>Image</th>
+                                    <th><i class="fas fa-cogs mr-2"></i>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,18 +81,31 @@ include("connection.php")
                 while($cat = mysqli_fetch_array($q)){
                 ?>
                     <tr>
-                        <td scope="row"><?php echo $cat[1]?></td>
+                                    <td>
+                                        <strong class="text-primary"><?php echo $cat[1]?></strong>
+                                    </td>
                         <td><?php echo $cat[2]?></td>
-                        <td><img src="img/<?php echo $cat[3]?>" alt="" height="150px"></td>
-                        <td>
-                            <!-- Delete and Update buttons -->
-                            <a href="?did=<?php echo $cat[0]?>" class="btn btn-danger">Delete</a>  
-                            <a href="catupdate.php?up=<?php echo $cat[0]?>"  class="btn btn-info">Update</a>
+                                    <td>
+                                        <img src="img/<?php echo $cat[3]?>" alt="Category Image" height="80px" class="img-thumbnail">
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="catupdate.php?up=<?php echo $cat[0]?>" class="btn btn-info btn-sm">
+                                                <i class="fas fa-edit mr-1"></i>Update
+                                            </a>
+                                            <a href="?did=<?php echo $cat[0]?>" class="btn btn-danger btn-sm" 
+                                               onclick="return confirm('Are you sure you want to delete this category?')">
+                                                <i class="fas fa-trash mr-1"></i>Delete
+                                            </a>
+                                        </div>
                         </td>
                     </tr>
                 <?php } ?>
                 </tbody>
             </table>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <?php
@@ -108,8 +151,12 @@ include("connection.php")
                     Select "Logout" below if you are ready to end your current session.
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                    <a class="btn btn-primary" href="login.html">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </a>
                 </div>
             </div>
         </div>

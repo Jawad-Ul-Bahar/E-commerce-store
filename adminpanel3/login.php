@@ -2,7 +2,8 @@
 include("connection.php");
 session_start();
 
-if(isset($_SESSION['username'])!=null){
+// Check if admin is already logged in
+if(isset($_SESSION['admin_username'])!=null){
     echo "<script>location.assign('index.php')</script>";
 } else {
 ?>
@@ -27,7 +28,7 @@ if(isset($_SESSION['username'])!=null){
             margin: 0;
             padding: 0;
             height: 100vh;
-            background-image: url('../theme/images/BG-L2.png');
+            background-image: url('../images/BG-L2.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -70,7 +71,7 @@ if(isset($_SESSION['username'])!=null){
 <body>
 
     <div class="login-card text-center">
-        <h3 class="text-gray-900 mb-4">Login Here!</h3>
+        <h3 class="text-gray-900 mb-4">Admin Login</h3>
 
         <form class="user" method="post">
             <div class="form-group">
@@ -104,17 +105,20 @@ if(isset($_SESSION['username'])!=null){
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            $q = mysqli_query($con, "SELECT * FROM `users` WHERE email='$email' AND pass='$password'");
+            // Only allow users with admin role to login
+            $q = mysqli_query($con, "SELECT * FROM `users` WHERE email='$email' AND pass='$password' AND role='admin'");
             $login = mysqli_num_rows($q);
             $user = mysqli_fetch_array($q);
 
             if($login){
-                $_SESSION['username'] = $user[1];
-                $_SESSION['userrole'] = $user[5];
+                // Use separate session variables for admin
+                $_SESSION['admin_username'] = $user[1];
+                $_SESSION['admin_userrole'] = $user[5];
+                $_SESSION['admin_userid'] = $user[0];
 
-                echo "<script>alert('Login successfully'); location.assign('index.php')</script>";
+                echo "<script>alert('Admin login successful'); location.assign('index.php')</script>";
             } else {
-                echo "<script>alert('Login failed')</script>";
+                echo "<script>alert('Login failed - Only admins can access this panel')</script>";
             }
         }
         ?>
@@ -124,7 +128,7 @@ if(isset($_SESSION['username'])!=null){
             <a class="small" href="forgot-password.html">Forgot Password?</a>
         </div>
         <div class="text-center">
-            <a class="small" href="register.php">Create an Account!</a>
+            <a class="small" href="register.php">Create an Admin Account!</a>
         </div>
     </div>
 

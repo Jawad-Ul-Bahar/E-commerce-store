@@ -1,7 +1,10 @@
 <?php
 session_start();
-session_unset();
-session_destroy();
-echo "<script>location.assign('login.php')</script>";
 
+// Only clear admin session variables, leave user sessions intact
+unset($_SESSION['admin_username']);
+unset($_SESSION['admin_userrole']);
+unset($_SESSION['admin_userid']);
+
+echo "<script>location.assign('login.php')</script>";
 ?>

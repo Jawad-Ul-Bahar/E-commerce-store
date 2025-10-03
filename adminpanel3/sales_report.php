@@ -1,4 +1,12 @@
-<?php include('connection.php'); ?>
+<?php 
+// Start session and check admin login
+session_start();
+if(isset($_SESSION['admin_username'])==null){
+    echo "<script>location.assign('login.php')</script>";
+}
+
+include('connection.php'); 
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,44 +33,60 @@
 
     <!-- Page Content -->
     <div style="margin-top: 100px; margin-left: 125px" class="container mb-5">
-        <h2 class="text-center mb-4">
-            <span style="color:#009efb">S</span>ales <span style="color:#009efb">R</span>eport (Stored Summary)
-        </h2>
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="h3 mb-0 text-gray-800 text-center">
+                    <i class="fas fa-chart-bar mr-2 text-primary"></i>Sales Report
+                </h2>
+                <p class="text-muted text-center mt-2">Comprehensive sales analysis and revenue tracking</p>
+            </div>
+        </div>
 
-        <div class="table-responsive">
-            <table id="salesTable" class="table table-bordered table-striped">
-                <thead class="bg-primary text-white">
-                    <tr>
-                        <th>Product Name</th>
-                        <th>Qty Sold</th>
-                        <th>Product Revenue</th>
-                        <th>Tax</th>
-                        <th>Shipping</th>
-                        <th>Grand Total</th>
-                        <th>Last Completed</th>
-                        <th>Report Generated</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    $query = "SELECT * FROM sales_reports ORDER BY total_quantity_sold DESC";
-                    $result = mysqli_query($con, $query);
+        <!-- Sales Report Table -->
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">
+                    <i class="fas fa-list mr-2"></i>Sales Summary Report
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="salesTable" class="table table-bordered table-striped table-hover">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th><i class="fas fa-box mr-2"></i>Product Name</th>
+                                <th><i class="fas fa-cubes mr-2"></i>Qty Sold</th>
+                                <th><i class="fas fa-dollar-sign mr-2"></i>Product Revenue</th>
+                                <th><i class="fas fa-percentage mr-2"></i>Tax</th>
+                                <th><i class="fas fa-shipping-fast mr-2"></i>Shipping</th>
+                                <th><i class="fas fa-calculator mr-2"></i>Grand Total</th>
+                                <th><i class="fas fa-calendar-check mr-2"></i>Last Completed</th>
+                                <th><i class="fas fa-clock mr-2"></i>Report Generated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $query = "SELECT * FROM sales_reports ORDER BY total_quantity_sold DESC";
+                            $result = mysqli_query($con, $query);
 
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['product_name']) . "</td>";
-                        echo "<td>" . number_format($row['total_quantity_sold']) . "</td>";
-                        echo "<td>Rs. " . number_format($row['total_product_revenue']) . "</td>";
-                        echo "<td>Rs. " . number_format($row['total_tax']) . "</td>";
-                        echo "<td>Rs. " . number_format($row['total_shipping']) . "</td>";
-                        echo "<td>Rs. " . number_format($row['grand_total']) . "</td>";
-                        echo "<td>" . date("d-M-Y h:i A", strtotime($row['last_completed_at'])) . "</td>";
-                        echo "<td>" . date("d-M-Y h:i A", strtotime($row['generated_at'])) . "</td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+                            while ($row = mysqli_fetch_assoc($result)) {
+                                echo "<tr>";
+                                echo "<td><strong class='text-primary'>" . htmlspecialchars($row['product_name']) . "</strong></td>";
+                                echo "<td><span class='badge badge-info'>" . number_format($row['total_quantity_sold']) . "</span></td>";
+                                echo "<td><span class='text-success font-weight-bold'>Rs. " . number_format($row['total_product_revenue']) . "</span></td>";
+                                echo "<td>Rs. " . number_format($row['total_tax']) . "</td>";
+                                echo "<td>Rs. " . number_format($row['total_shipping']) . "</td>";
+                                echo "<td><span class='text-primary font-weight-bold'>Rs. " . number_format($row['grand_total']) . "</span></td>";
+                                echo "<td>" . date("d-M-Y h:i A", strtotime($row['last_completed_at'])) . "</td>";
+                                echo "<td>" . date("d-M-Y h:i A", strtotime($row['generated_at'])) . "</td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
